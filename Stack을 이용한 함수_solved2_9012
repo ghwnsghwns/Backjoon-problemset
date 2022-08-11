@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+string PS[20000];
+#define SIZE 100
+
+class Stack{
+    char *arr;
+    int top;
+    int capacity;
+public:
+    Stack(int size = SIZE);
+
+    void push(char);
+    char pop();
+    char peek();
+
+    int size();
+    bool isEmpty();
+    bool isFull();
+};
+
+Stack::Stack(int size){
+    arr = new char[size];
+    capacity = size;
+    top = -1;
+}
+
+void Stack::push(char x){
+    if(isFull()){
+        cout << "overflow" << '\n';
+        exit(EXIT_FAILURE);
+    }
+    arr[++top] = x;
+}
+
+char Stack :: pop(){
+    if(isEmpty()) return 'a';
+    return arr[top--];
+}
+
+char Stack::peek(){
+    if(!isEmpty()){
+        return arr[top];
+    }
+    else {
+        return 'a';
+    }
+}
+
+int Stack::size(){
+    return top+1;
+}
+
+bool Stack::isEmpty() {
+    return top == -1;
+}
+
+bool Stack::isFull() {
+    return top == capacity -1;
+}
+
+bool isVPS (string str);
+
+int main () {
+    int T;
+    cin >> T;
+    for (int i=0; i<T; i++){
+        cin >> PS[i];
+        if(PS[i].length()<2||PS[i].length()>50) throw ("Error");
+    }
+
+    for (int i=0; i<T; i++){
+        if(isVPS(PS[i])) cout << "YES" << '\n';
+        else cout << "NO" << '\n';
+    }
+
+    return 0;
+}
+
+bool isVPS (string str){
+    Stack List;
+    for (int i=0; i<str.length(); i++){
+            if(str[i]=='(') List.push('1');
+            else if (str[i]==')') {
+                if (List.peek()=='a') return false;
+                else List.pop();
+            }
+            else throw("Error");
+    }
+
+    if(List.isEmpty()) return true;
+    else return false;
+};
